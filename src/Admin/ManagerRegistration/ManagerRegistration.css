@@ -1,0 +1,76 @@
+.managerregistration-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .managerregistration-content {
+    margin-top: 70px;
+    margin-left: 266px;
+    padding: 20px;
+    width: calc(96% - 237px);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+  }
+  
+  .managerregistration-content.collapsed {
+    margin-left: 50px;
+    width: calc(100% - 50px);
+  }
+  
+  /* Card Style */
+  .managerregistration-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Card shadow */
+  }
+  
+  /* Table Styles */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .styled-table th,
+  .styled-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+  }
+  
+  /* Table Header */
+  .thead-custom th {
+    background-color: #8894ac;
+    color: white;
+    font-weight: bold;
+  }
+  
+  /* Striped Rows */
+  .styled-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  /* Hover Effect */
+  .styled-table tbody tr:hover {
+    background-color: #e6f7ff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 767px) {
+    .managerregistration-container {
+        flex-direction: column;
+    }
+  
+    .managerregistration-content {
+        margin-left: 0;
+        width: 100%;
+    }
+  
+    .managerregistration-content.collapsed {
+        margin-left: 0;
+        width: 100%;
+    }
+  }
+  
