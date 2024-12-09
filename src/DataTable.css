@@ -1,0 +1,26 @@
+.horizontal-pagination-card {
+    display: flex; /* Flexbox to align everything horizontally */
+    justify-content: space-between; /* Spread buttons and info horizontally */
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8); /* White with opacity */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    padding: 10px 15px; /* Space inside the card */
+    margin: 10px 0;
+    width: auto; /* Restrict only horizontal expansion */
+  }
+  
+  .pagination-info {
+    font-size: 14px; /* Set smaller font for consistent styling */
+  }
+  
+  .pagination-buttons button {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .pagination-buttons button:hover {
+    background-color: #004085; /* Dark blue on hover */
+    color: #fff;
+  }
+  

@@ -1,9 +1,9 @@
-.employeedashboard-container {
+.managerdashboard-container {
     display: flex;
     flex-direction: row;
   }
   
-  .employeedashboard-content {
+  .managerdashboard-content {
     margin-top: 70px;
     margin-left: 266px;
     padding: 20px;
@@ -11,13 +11,13 @@
     transition: margin-left 0.3s ease, width 0.3s ease;
   }
   
-  .employeedashboard-content.collapsed {
+  .managerdashboard-content.collapsed {
     margin-left: 50px;
     width: calc(100% - 50px);
   }
   
   /* Card Style */
-  .employeedashboard-card {
+  .managerdashboard-card {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
@@ -31,16 +31,16 @@
   
  
   @media (max-width: 767px) {
-    .employeedashboard-container {
+    .managerdashboard-container {
         flex-direction: column;
     }
   
-    .employeedashboard-content {
+    .managerdashboard-content {
         margin-left: 0;
         width: 100%;
     }
   
-    .employeedashboard-content.collapsed {
+    .managerdashboard-content.collapsed {
         margin-left: 0;
         width: 100%;
     }

@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+
+table th:nth-child(even),
+table td:nth-child(even) {
+    background-color: #f7f7f7; /* Very Light Gray */
+}
+
+/* General table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+
+.table-container {
+  height: 400px; /* Set your desired height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Optional: Prevent horizontal scrolling */
+  
+}
+
+table thead th {
+  position: sticky;
+  top: 0; 
+  background-color: #fff; /* Background color for visibility */
+  z-index: 1; /* Ensure the header stays above table content */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Optional: Add shadow for better visibility */
+}
+
+
+

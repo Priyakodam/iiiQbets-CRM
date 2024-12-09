@@ -43,7 +43,7 @@ const Login = () => {
       const user = userCredential.user;
 
       // Fetch user data from Firestore
-      const userDoc = await db.collection('addemployee').doc(user.uid).get();
+      const userDoc = await db.collection('users').doc(user.uid).get();
 
       if (userDoc.exists) {
         const userData = userDoc.data();
@@ -58,9 +58,9 @@ const Login = () => {
         });
 
         // Role-based navigation
-        if (role === 'manager') {
+        if (role === 'Manager') {
           navigate('/m-dashboard'); // Navigate to manager dashboard
-        } else if (role === 'employee') {
+        } else if (role === 'Employee') {
           navigate('/e-dashboard'); // Navigate to employee dashboard
         } else {
           setError('Invalid role.');

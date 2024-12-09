@@ -1,9 +1,9 @@
-.managerregistration-container {
+.m-team-container {
     display: flex;
     flex-direction: row;
   }
   
-  .managerregistration-content {
+  .m-team-content {
     margin-top: 70px;
     margin-left: 266px;
     padding: 20px;
@@ -11,13 +11,13 @@
     transition: margin-left 0.3s ease, width 0.3s ease;
   }
   
-  .managerregistration-content.collapsed {
+  .m-team-content.collapsed {
     margin-left: 50px;
     width: calc(100% - 50px);
   }
   
   /* Card Style */
-  .managerregistration-card {
+  .m-team-card {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
@@ -59,25 +59,18 @@
   
   /* Responsive Design */
   @media (max-width: 767px) {
-    .managerregistration-container {
+    .m-team-container {
         flex-direction: column;
     }
   
-    .managerregistration-content {
+    .m-team-content {
         margin-left: 0;
         width: 100%;
     }
   
-    .managerregistration-content.collapsed {
+    .m-team-content.collapsed {
         margin-left: 0;
         width: 100%;
     }
   }
-
-  .managerregistration-card {
-    background-color: #fff;
-    padding: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Card shadow */
-    width: 650px; /* Set a specific width or use a percentage */
-    max-width: 100%; /* Optional: Ensure it doesn't exceed 90% of the parent */
-}
+  
