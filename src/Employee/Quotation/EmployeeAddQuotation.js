@@ -16,6 +16,7 @@ const EmployeeAddQuotation = () => {
     category: '',
     quantity: '',
   });
+  const [productOptions, setProductOptions] = useState([]); 
 
   useEffect(() => {
     const fetchReportingManagerUid = async () => {
@@ -40,6 +41,39 @@ const EmployeeAddQuotation = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+
+
+    const fetchProductOptions = async (productType) => {
+      let collectionName = '';
+  
+      // Determine which collection to fetch based on product type
+      if (productType === 'Product') {
+        collectionName = 'products'; // Replace with your actual product collection
+      } else if (productType === 'Project') {
+        collectionName = 'projects'; // Replace with your actual project collection
+      } else if (productType === 'Service') {
+        collectionName = 'services'; // Replace with your actual service collection
+      }
+  
+      try {
+        const productSnapshot = await db.collection(collectionName).get();
+        const items = productSnapshot.docs.map(doc => doc.data().itemName);
+        setProductOptions(items);
+      } catch (error) {
+        console.error('Error fetching product options: ', error);
+      }
+    };
+    
+
+
+     useEffect(() => {
+        // Reset product options when product type changes
+        setProductOptions([]);
+        if (formData.productType) {
+          fetchProductOptions(formData.productType);
+        }
+      }, [formData.productType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +112,7 @@ const EmployeeAddQuotation = () => {
           Add Quotation
         </Button>
 
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={showModal} size='lg' onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Add Quotation</Modal.Title>
           </Modal.Header>
@@ -110,37 +144,48 @@ const EmployeeAddQuotation = () => {
                   </Form.Group>
                 </Col>
               </Row>
-              <Row className="mb-3">
-                <Col md={6}>
-                  <Form.Group controlId="category">
-                    <Form.Label>Select Category</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">Choose...</option>
-                      <option value="Product">Product</option>
-                      <option value="Service">Service</option>
-                      <option value="Service">Project</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="quantity">
-                    <Form.Label>Quantity</Form.Label>
-                    <Form.Control
-                      type="number"
-                      name="quantity"
-                      value={formData.quantity}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+             <Row className='mb-3'>
+                             <Col md={6}>
+                               <Form.Group controlId="productType">
+                                 <Form.Label>Product Type</Form.Label>
+                                 <Form.Select
+                                   name="productType"
+                                   value={formData.productType}
+                                   onChange={handleInputChange}
+                                   required
+                                 >
+                                   <option value="">Select Product Type</option>
+                                   <option value="Product">Product</option>
+                                   <option value="Project">Project</option>
+                                   <option value="Service">Service</option>
+                                 </Form.Select>
+                               </Form.Group>
+                             </Col>
+             
+                             <Col md={6}>
+                               <Form.Group controlId="product">
+                                 <Form.Label>Product</Form.Label>
+                                 <Form.Select
+                                   name="product"
+                                   value={formData.product}
+                                   onChange={handleInputChange}
+                                   required
+                                   disabled={productOptions.length === 0}
+                                 >
+                                   <option value="">Select Item</option>
+                                   {productOptions.length > 0 ? (
+                                     productOptions.map((item, index) => (
+                                       <option key={index} value={item}>
+                                         {item}
+                                       </option>
+                                     ))
+                                   ) : (
+                                     <option value="" disabled>No items available</option>
+                                   )}
+                                 </Form.Select>
+                               </Form.Group>
+                             </Col>
+                           </Row>
               <Button variant="primary" type="submit">
                 Add
               </Button>

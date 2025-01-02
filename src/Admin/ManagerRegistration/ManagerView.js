@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { db } from "../../Firebase/FirebaseConfig"; // Adjust the path as necessary
+import { db } from "../../Firebase/FirebaseConfig"; 
 import { Button, Modal } from 'react-bootstrap';
 import Dashboard from "../Dashboard/Dashboard";
-import ManagerRegistration from './ManagerRegistration'; // Import the ManagerRegistration component
-import DataTable from '../../DataTable'; // Import your DataTable component
+import ManagerRegistration from './ManagerRegistration'; 
+import DataTable from '../../DataTable'; 
 import './ManagerView.css';
 
-// ManagerView Component
+
 const ManagerView = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [managers, setManagers] = useState([]); // State to fetch manager data
@@ -14,22 +14,22 @@ const ManagerView = () => {
 
   // Fetch manager data on component load
   useEffect(() => {
-    const fetchManagers = async () => {
-      try {
-        const snapshot = await db
-          .collection("users")
-          .where("role", "==", "Manager")
-          .orderBy("createdAt", "desc") // Order by creation date
-          .get();
-
-        const managerData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const unsubscribe = db
+      .collection("users")
+      .where("role", "==", "Manager")
+      .orderBy("createdAt", "desc") // Order by creation date
+      .onSnapshot(snapshot => {
+        const managerData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setManagers(managerData);
-      } catch (error) {
+      }, (error) => {
         console.error("Error fetching managers: ", error);
-      }
-    };
+      });
 
-    fetchManagers();
+    // Cleanup function to unsubscribe from the snapshot listener when component unmounts
+    return () => unsubscribe();
   }, []);
 
   const handleShow = () => setShowModal(true);

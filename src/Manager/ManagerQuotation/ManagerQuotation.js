@@ -59,7 +59,7 @@ const ManagerQuotation = () => {
           Add Quotation
         </Button>
 
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={showModal} size="lg"onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Add Quotation</Modal.Title>
           </Modal.Header>

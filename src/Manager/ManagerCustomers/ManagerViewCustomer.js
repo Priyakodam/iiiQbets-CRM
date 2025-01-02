@@ -12,68 +12,72 @@ const CustomerTable = () => {
     const [showModal, setShowModal] = useState(false);
     const [editData, setEditData] = useState(null);
 
-
     useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                // Query for customeraddedbyuid
-                const queryByCustomerAddedByUid = db.collection('customers')
-                    .where('customeraddedbyuid', '==', user.uid)
-                    .orderBy('createdAt', 'desc');
+        const fetchCustomers = () => {
+            // Query for customeraddedbyuid
+            const queryByCustomerAddedByUid = db.collection('customers')
+                .where('customeraddedbyuid', '==', user.uid)
+                .orderBy('createdAt', 'desc');
 
-                // Query for assignedEmployeeUid
-                const queryByAssignedEmployeeUid = db.collection('customers')
-                    .where('reportingManagerUid', '==', user.uid)
-                    .orderBy('createdAt', 'desc');
+            // Query for assignedEmployeeUid
+            const queryByAssignedEmployeeUid = db.collection('customers')
+                .where('reportingManagerUid', '==', user.uid)
+                .orderBy('createdAt', 'desc');
 
-                // Fetch both queries
-                const [addedByUidSnapshot, assignedEmployeeUidSnapshot] = await Promise.all([
-                    queryByCustomerAddedByUid.get(),
-                    queryByAssignedEmployeeUid.get()
-                ]);
-
-                // Merge the customer data from both queries
-                const customerData = [
-                    ...addedByUidSnapshot.docs.map((doc) => ({
+            // Listen to both queries using onSnapshot
+            const unsubscribeAddedByUid = queryByCustomerAddedByUid.onSnapshot(
+                (snapshot) => {
+                    const customerData = snapshot.docs.map((doc) => ({
                         id: doc.id,
-                        ...doc.data()
-                    })),
-                    ...assignedEmployeeUidSnapshot.docs.map((doc) => ({
+                        ...doc.data(),
+                    }));
+
+                    setCustomers((prevCustomers) => [
+                        ...prevCustomers,
+                        ...customerData,
+                    ]);
+                    setLoading(false);
+                },
+                (error) => {
+                    console.error('Error fetching customer data:', error);
+                    setLoading(false);
+                }
+            );
+
+            const unsubscribeAssignedEmployeeUid = queryByAssignedEmployeeUid.onSnapshot(
+                (snapshot) => {
+                    const customerData = snapshot.docs.map((doc) => ({
                         id: doc.id,
-                        ...doc.data()
-                    }))
-                ];
+                        ...doc.data(),
+                    }));
 
-                // Deduplicate by ID
-                const uniqueCustomers = customerData.reduce((acc, customer) => {
-                    if (!acc.some(c => c.id === customer.id)) {
-                        acc.push(customer);
-                    }
-                    return acc;
-                }, []);
+                    setCustomers((prevCustomers) => [
+                        ...prevCustomers,
+                        ...customerData,
+                    ]);
+                    setLoading(false);
+                },
+                (error) => {
+                    console.error('Error fetching customer data:', error);
+                    setLoading(false);
+                }
+            );
 
-                // Sort by createdAt (Firestore Timestamp)
-                const sortedCustomers = uniqueCustomers.sort((a, b) => {
-                    return b.createdAt.seconds - a.createdAt.seconds; // Sorting by Firestore Timestamp
-                });
-
-                // Assign S.No after sorting
-                const customersWithSno = sortedCustomers.map((customer, index) => ({
-                    sno: index + 1, // S.No starts from 1
-                    ...customer
-                }));
-
-                setCustomers(customersWithSno);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching customer data:', error);
-                setLoading(false);
-            }
+            // Cleanup the listeners when the component is unmounted
+            return () => {
+                unsubscribeAddedByUid();
+                unsubscribeAssignedEmployeeUid();
+            };
         };
 
         if (user && user.uid) {
             fetchCustomers();
         }
+
+        // Cleanup effect when component unmounts
+        return () => {
+            setCustomers([]);
+        };
     }, [user]);
 
     const handleEdit = (customer) => {
@@ -116,7 +120,11 @@ const CustomerTable = () => {
     };
 
     const columns = [
-        { Header: 'S.No', accessor: 'sno' },
+        {
+            Header: 'S.No',
+            id: 'serialNumber',
+            Cell: ({ row }) => row.index + 1,
+        },
         { Header: 'Name', accessor: 'customerName' },
         { Header: 'Company Name', accessor: 'companyName' },
         { Header: 'Mobile Number', accessor: 'mobileNumber' },
@@ -125,18 +133,19 @@ const CustomerTable = () => {
         { Header: 'Address', accessor: 'address' },
         { Header: 'Source', accessor: 'source' },
         { Header: 'Added By', accessor: 'customerAddedby' },
-        { Header: 'Assigned To', accessor: 'assignedEmployeeName' || 'NA'},
+        { Header: 'Assigned To', accessor: 'assignedEmployeeName' || 'NA' },
         {
             Header: 'Action',
             accessor: 'action',
             Cell: ({ row }) => (
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <Button variant="primary" size="sm" onClick={() => handleEdit(row.original)}><FaEdit/></Button>
-                    <Button variant="danger" size="sm"  onClick={() => handleDelete(row.original.id)}><FaTrashAlt /></Button>
+                    <Button variant="primary" size="sm" onClick={() => handleEdit(row.original)}><FaEdit /></Button>
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(row.original.id)}><FaTrashAlt /></Button>
                 </div>
             )
         }
     ];
+
     return (
         <div>
             <h2>Customer List</h2>

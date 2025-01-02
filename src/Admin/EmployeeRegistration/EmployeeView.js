@@ -6,25 +6,22 @@ const EmployeeView = () => {
     const [Employees, setEmployees] = useState([]);
 
     useEffect(() => {
-        const fetchEmployees = async () => {
-            try {
-                const snapshot = await db
-                    .collection("users")
-                    .where("role", "==", "Employee")
-                    .orderBy("createdAt", "desc")
-                    .get();
-
+        const unsubscribe = db
+            .collection("users")
+            .where("role", "==", "Employee")
+            .orderBy("createdAt", "desc")
+            .onSnapshot(snapshot => {
                 const EmployeeData = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
                 setEmployees(EmployeeData);
-            } catch (error) {
+            }, (error) => {
                 console.error("Error fetching Employees: ", error);
-            }
-        };
+            });
 
-        fetchEmployees();
+        // Cleanup function to unsubscribe from the snapshot listener when the component unmounts
+        return () => unsubscribe();
     }, []);
 
     // Define columns for DataTable

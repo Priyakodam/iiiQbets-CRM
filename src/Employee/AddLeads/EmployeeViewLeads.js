@@ -20,36 +20,42 @@ const LeadTable = () => {
     });
 
     useEffect(() => {
-        const fetchleads = async () => {
-            try {
-                const querySnapshot = await db.collection('leads')
+        const unsubscribe = () => {
+            if (user && user.uid) {
+                const leadsRef = db.collection('leads')
                     .where('leadAddedbyUid', '==', user.uid)
-                    .orderBy('createdAt', 'desc')
-                    .get();
-    
-                const customerData = querySnapshot.docs.map((doc, index) => ({
-                    id: doc.id,
-                    sno: index + 1,
-                    customerName: doc.data().customerName || 'N/A', // Handle missing fields
-                    companyName: doc.data().companyName || 'N/A',
-                    mobileNumber: doc.data().mobileNumber || 'N/A',
-                    email: doc.data().email || 'N/A',
-                    product: doc.data().product || 'N/A',
-                    leadAddedby: doc.data().leadAddedby || 'N/A',
-                }));
-                setleads(customerData);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching customer data:', error);
-                setLoading(false);
+                    .orderBy('createdAt', 'desc');
+
+                // Use onSnapshot for real-time updates
+                return leadsRef.onSnapshot((querySnapshot) => {
+                    const customerData = querySnapshot.docs.map((doc, index) => ({
+                        id: doc.id,
+                        sno: index + 1,
+                        customerName: doc.data().customerName || 'N/A', // Handle missing fields
+                        companyName: doc.data().companyName || 'N/A',
+                        mobileNumber: doc.data().mobileNumber || 'N/A',
+                        email: doc.data().email || 'N/A',
+                        product: doc.data().product || 'N/A',
+                        leadAddedby: doc.data().leadAddedby || 'N/A',
+                    }));
+                    setleads(customerData);
+                    setLoading(false);
+                }, (error) => {
+                    console.error('Error fetching customer data:', error);
+                    setLoading(false);
+                });
             }
         };
-    
+
         if (user && user.uid) {
-            fetchleads();
+            unsubscribe(); // Fetch leads when user is available
         }
+
+        return () => {
+            unsubscribe(); // Clean up the listener on unmount
+        };
     }, [user]);
-    
+
     const columns = [
         { Header: 'S.No', accessor: 'sno' },
         { Header: 'Customer Name', accessor: 'customerName' },
@@ -63,19 +69,18 @@ const LeadTable = () => {
             accessor: 'actions',
             Cell: ({ row }) => (
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <FaEdit 
-                    style={{ color: 'blue', cursor: 'pointer' }}
-                    onClick={() => handleEdit(row.original)}
-                />
-                <FaTrash 
-                    style={{ color: 'red', cursor: 'pointer' }}
-                    onClick={() => handleDelete(row.original.id)}
-                />
-            </div>
+                    <FaEdit 
+                        style={{ color: 'blue', cursor: 'pointer' }}
+                        onClick={() => handleEdit(row.original)}
+                    />
+                    <FaTrash 
+                        style={{ color: 'red', cursor: 'pointer' }}
+                        onClick={() => handleDelete(row.original.id)}
+                    />
+                </div>
             )
         }
     ];
-    
 
     const handleEdit = (lead) => {
         setSelectedLead(lead);
@@ -117,7 +122,7 @@ const LeadTable = () => {
     return (
         <div>
             <div style={{textAlign:"center"}}>
-            <h2>Leads</h2>
+                <h2>Leads</h2>
             </div>
             {loading ? (
                 <p>Loading...</p>
