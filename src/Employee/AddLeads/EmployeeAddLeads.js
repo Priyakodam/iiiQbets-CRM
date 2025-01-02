@@ -176,13 +176,13 @@ const EmployeeAddLeads = () => {
     <div className="e-addleads-container">
       <EmployeeSidebar onToggleSidebar={setCollapsed} />
       <div className={`e-addleads-content ${collapsed ? 'collapsed' : ''}`}>
-      <div className="top-bar d-flex justify-content-end align-items-center mb-2">
+      <div className="top-bar d-flex justify-content-end align-items-center">
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           Add Lead
         </button>
         </div>
 
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={showModal} size="lg" onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Add Lead</Modal.Title>
           </Modal.Header>

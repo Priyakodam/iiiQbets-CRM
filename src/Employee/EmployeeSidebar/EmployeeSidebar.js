@@ -41,7 +41,7 @@ const EmployeeSidebar = ({ onToggleSidebar }) => {
             className={`sidebar-toggle ${collapsed ? 'collapsed' : ''}`}
             onClick={toggleSidebar}
           >
-            <IoHomeOutline className="toggle-icon" />
+            <IoHomeOutline className="toggle-icon" style={{color:"white"}} />
           </div>
           <img src={logo} alt="Logo" className="company-logo" />
         </div>

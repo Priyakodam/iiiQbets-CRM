@@ -10,6 +10,8 @@ const AddCustomer = () => {
   const { user } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [reportingManagerUid, setReportingManagerUid] = useState(null);
   const [formData, setFormData] = useState({
     customerName: '',
@@ -86,7 +88,7 @@ const AddCustomer = () => {
         </Button>
 
         {/* Modal for Adding Customer */}
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={showModal}  size="lg" onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Add Customer</Modal.Title>
           </Modal.Header>
@@ -196,7 +198,7 @@ const AddCustomer = () => {
           </Modal.Body>
         </Modal>
 
-        <EmployeeViewCustomer/>
+        <EmployeeViewCustomer />
       </div>
     </div>
   );

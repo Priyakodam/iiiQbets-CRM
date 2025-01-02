@@ -98,7 +98,7 @@ const ManagerAddLeads = () => {
                 </button>
           
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal show={showModal} size="lg" onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Add Lead</Modal.Title>
       </Modal.Header>

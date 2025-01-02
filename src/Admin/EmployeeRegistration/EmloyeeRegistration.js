@@ -79,13 +79,13 @@ const EmployeeRegistration = () => {
             <div className="top-bar d-flex justify-content-end align-items-center mb-2">
                 <Button variant="primary" onClick={() => setShowModal(true)}>Add Employee</Button>
                 </div>
-                <Modal show={showModal} onHide={() => setShowModal(false)} >
+                <Modal show={showModal} size="lg" onHide={() => setShowModal(false)} >
                     <Modal.Header closeButton>
                         <Modal.Title>Add Employee</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Card className='employeeregistration-card mt-4'>
-                            <Card.Body>
+                        <div className='employeeregistration-card mt-4'>
+                           
                                 <Form onSubmit={handleSubmit}>
                                     <Row>
                                         <Col md={6}>
@@ -161,8 +161,8 @@ const EmployeeRegistration = () => {
                                     </Row>
                                     <Button variant="primary" type="submit">Submit</Button>
                                 </Form>
-                            </Card.Body>
-                        </Card>
+                            
+                        </div>
                     </Modal.Body>
                 </Modal>
                 <div className='mt-3'>

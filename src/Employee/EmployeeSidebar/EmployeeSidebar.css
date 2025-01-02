@@ -80,13 +80,14 @@
   
   .nav-icon {
     margin-right: 10px;
+    color: white;
   }
   
   .link_text {
     display: inline-block;
     margin-left: 10px;
     font-size: 16px;
-    color: #000;
+    color: white;
   }
   
   .nav-item.active .nav-link {

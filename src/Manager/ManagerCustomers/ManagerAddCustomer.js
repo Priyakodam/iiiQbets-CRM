@@ -107,7 +107,7 @@ const ManagerAddCustomer = () => {
     <Button variant="primary" onClick={() => setShowModal(true)}>
           Add Customer
         </Button>
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={showModal} size="lg" onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Add Customer</Modal.Title>
           </Modal.Header>

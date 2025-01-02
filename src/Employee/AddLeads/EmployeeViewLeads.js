@@ -3,6 +3,7 @@ import { useAuth } from '../../Context/AuthContext';
 import { db } from '../../Firebase/FirebaseConfig';
 import DataTable from "../../DataTable";
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { FaTrash, FaEdit } from 'react-icons/fa';
 
 const LeadTable = () => {
     const { user } = useAuth();
@@ -61,14 +62,16 @@ const LeadTable = () => {
             Header: 'Actions',
             accessor: 'actions',
             Cell: ({ row }) => (
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <Button variant="primary" size="sm" onClick={() => handleEdit(row.original)}>
-                        Edit
-                    </Button>
-                    <Button variant="danger" size="sm" onClick={() => handleDelete(row.original.id)}>
-                        Delete
-                    </Button>
-                </div>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <FaEdit 
+                    style={{ color: 'blue', cursor: 'pointer' }}
+                    onClick={() => handleEdit(row.original)}
+                />
+                <FaTrash 
+                    style={{ color: 'red', cursor: 'pointer' }}
+                    onClick={() => handleDelete(row.original.id)}
+                />
+            </div>
             )
         }
     ];

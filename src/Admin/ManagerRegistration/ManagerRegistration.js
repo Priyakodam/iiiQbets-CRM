@@ -55,12 +55,12 @@ const ManagerRegistration = ({ closeModal }) => { // Accept closeModal as a prop
     };
 
     return (
-        <div className="managerregistration-container">
-            <Card  className="managerregistration-card mt-4" >
+        <div>
+            {/* <Card  className="managerregistration-card mt-4" > */}
                 {/* <Card.Header>
                     <h4>Manager Registration</h4>
                 </Card.Header> */}
-                <Card.Body>
+                
                     <Form onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <Col md={6}>
@@ -116,8 +116,7 @@ const ManagerRegistration = ({ closeModal }) => { // Accept closeModal as a prop
                         <Button variant="secondary" onClick={closeModal} className="close-modal">Close</Button> &nbsp;
                         <Button variant="primary" type="submit">Submit</Button>
                     </Form>
-                </Card.Body>
-            </Card>
+            
         </div>
     );
 };

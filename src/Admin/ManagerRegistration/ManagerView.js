@@ -79,7 +79,7 @@ const ManagerView = () => {
         </div>
 
         {/* Modal for Manager Registration */}
-        <Modal show={showModal} onHide={handleClose}>
+        <Modal show={showModal} size="lg" onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Add Manager</Modal.Title>
           </Modal.Header>

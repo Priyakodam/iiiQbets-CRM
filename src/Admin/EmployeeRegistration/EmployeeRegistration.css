@@ -17,12 +17,12 @@
   }
   
   /* Card Style */
-  .employeeregistration-card {
+  /* .employeeregistration-card {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Card shadow */
-  }
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  } */
   
   /* Table Styles */
   .styled-table {
@@ -73,12 +73,12 @@
         width: 100%;
     }
   }
-.employeeregistration-card{
+/* .employeeregistration-card{
     background-color: #fff;
     padding: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Card shadow */
-    width: 650px; /* Set a specific width or use a percentage */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); 
+    width: 650px; 
     max-width: 100%;
-}
+} */
 
 

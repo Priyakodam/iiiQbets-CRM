@@ -24,55 +24,63 @@ const CustomerTable = () => {
 
 
     
-
     useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const queryByCustomerAddedByUid = db.collection('customers')
-                    .where('customeraddedbyuid', '==', user.uid)
-                    .orderBy('createdAt', 'desc');
-
-                const queryByAssignedEmployeeUid = db.collection('customers')
-                    .where('assignedEmployeeUid', '==', user.uid)
-                    .orderBy('createdAt', 'desc');
-
-                const [addedByUidSnapshot, assignedEmployeeUidSnapshot] = await Promise.all([
-                    queryByCustomerAddedByUid.get(),
-                    queryByAssignedEmployeeUid.get()
-                ]);
-
-                const customerData = [
-                    ...addedByUidSnapshot.docs.map((doc, index) => ({
+        let unsubscribe;
+    
+        const fetchCustomers = () => {
+            unsubscribe = db.collection('customers')
+                .where('customeraddedbyuid', '==', user.uid)
+                .onSnapshot((snapshot) => {
+                    const addedByUidData = snapshot.docs.map((doc) => ({
                         id: doc.id,
-                        sno: index + 1,
                         ...doc.data()
-                    })),
-                    ...assignedEmployeeUidSnapshot.docs.map((doc, index) => ({
-                        id: doc.id,
-                        sno: addedByUidSnapshot.size + index + 1,
-                        ...doc.data()
-                    }))
-                ];
-
-                const uniqueCustomers = customerData.reduce((acc, customer) => {
-                    if (!acc.some(c => c.id === customer.id)) {
-                        acc.push(customer);
-                    }
-                    return acc;
-                }, []);
-
-                setCustomers(uniqueCustomers);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching customer data:', error);
-                setLoading(false);
-            }
+                    }));
+    
+                    db.collection('customers')
+                        .where('assignedEmployeeUid', '==', user.uid)
+                        .onSnapshot((assignedSnapshot) => {
+                            const assignedEmployeeData = assignedSnapshot.docs.map((doc) => ({
+                                id: doc.id,
+                                ...doc.data()
+                            }));
+    
+                            // Combine and remove duplicates
+                            const combinedData = [...addedByUidData, ...assignedEmployeeData];
+                            const uniqueCustomers = combinedData.reduce((acc, customer) => {
+                                if (!acc.some((c) => c.id === customer.id)) {
+                                    acc.push(customer);
+                                }
+                                return acc;
+                            }, []);
+    
+                            // Sort by `createdAt` in descending order (most recent first)
+                            const sortedCustomers = uniqueCustomers.sort((a, b) => {
+                                const dateA = a.createdAt ? a.createdAt.toDate() : new Date(0); // Fallback to epoch if `createdAt` is null
+                                const dateB = b.createdAt ? b.createdAt.toDate() : new Date(0); // Fallback to epoch if `createdAt` is null
+                                return dateB - dateA; // Sort in descending order
+                            });
+    
+                            // Assign `sno` field after sorting
+                            const numberedCustomers = sortedCustomers.map((customer, index) => ({
+                                sno: index + 1,
+                                ...customer
+                            }));
+    
+                            setCustomers(numberedCustomers);
+                            setLoading(false);
+                        });
+                });
         };
-
+    
         if (user && user.uid) {
             fetchCustomers();
         }
+    
+        return () => unsubscribe && unsubscribe();
     }, [user]);
+    
+    
+    
 
     const handleEdit = (customer) => {
         setSelectedCustomer(customer);
